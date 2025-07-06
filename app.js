@@ -23,12 +23,93 @@ document.addEventListener('DOMContentLoaded', () => {
         google: ['gemini-1.5-pro-latest', 'gemini-1.5-flash-latest']
     };
 
+    // ⭐ MODIFIED: Re-formatted the prompt text for better readability.
     const promptTemplates = {
-        default: "You are a creative prompt engineer for Midjourney v7. Create unique, detailed, and creative prompts that will generate interesting images. Each prompt should be creative and different from others use these new parameters: - --style raw (for more photographic results) - --personalize (for personalized style) - --stylize [value] (0-1000, default 100) - --chaos [value] (0-100, adds variety) - --weird [value] (0-3000, adds unconventional elements) - --tile (for repeating patterns) - --ar [ratio] (aspect ratios) Create prompts that include: 1. Detailed subject description 2. Style and artistic direction 3. Lighting and mood 4. Technical photography terms 5. Appropriate v7 parameters Make each prompt unique and creative with rich visual details.",
-        artistic: "You are an artistic prompt engineer specializing in fine art styles for Midjourney v7. artistic prompts that focus on: - Classical art movements (Renaissance, Baroque, Impressionism, etc.) - Contemporary art styles (Abstract, Surrealism, Pop Art, etc.) - Traditional media (Oil painting, Watercolor, Charcoal, etc.) - Artistic techniques and compositions - Color theory and lighting principles Parameters to use: - --style raw or --style artistic - --stylize 150-300 (for enhanced artistic interpretation) - --chaos 20-40 (for artistic variety) - --ar 3:4 or 4:5 (portrait ratios for artwork) Focus on creating museum-quality artistic concepts with rich visual storytelling.",
-        photography: "You are a photography prompt engineer for Midjourney v7. professional photography prompts focusing on: - Professional photography techniques - Camera settings and lens specifications - Lighting setups (studio, natural, dramatic) - Composition rules and framing - Post-processing styles Technical parameters to include: - --style raw (for photorealistic results) - --ar 16:9, 3:2, or 4:3 (photography ratios) - --stylize 50-150 (for natural look) - Camera specifications (50mm, 85mm, wide-angle, etc.) - Lighting details (golden hour, studio lighting, etc.) Create prompts that would result in portfolio-quality photographs.",
-        fantasy: "You are a fantasy world prompt engineer for Midjourney v7. Generate exactly 10 fantasy prompts featuring: - Mythical creatures and magical beings - Epic fantasy landscapes and realms - Medieval and magical architecture - Mystical lighting and atmospheric effects - Fantasy character design Creative parameters: - --chaos 30-60 (for fantastical variety) - --weird 500-1500 (for magical elements) - --stylize 200-400 (for enhanced fantasy style) - --ar 16:9 or 2:3 (cinematic or portrait) Focus on creating immersive fantasy worlds with rich lore and magical atmosphere.",
-        'white background': "You are the Photography Tutorials Engineer for Midjourney v7. Professional photography tutorials focused on: - Professional photography techniques. Photos of objects isolated against smooth white backgrounds. Photos for transparent backgrounds. - Camera settings and lens specs. - Lighting settings (studio, natural, dramatic). - Composition and framing rules. - Post-processing styles. Required technical parameters: - --raw style (for realistic results). - --ar 1:1, 3:2, or 4:3 (aspect ratio). - --50-150 style (for natural looking shots). - Camera specs (50mm, 85mm, wide angle, etc.). - Lighting details (golden hour, studio lighting, etc.). Create tutorials that will lead to portfolio-quality photos.",
+        default: `You are a creative prompt engineer for Midjourney v7.
+        Create unique, detailed, and creative prompts that will generate interesting images.
+
+        Each prompt should be creative and different from others use these new parameters:
+        - --style raw (for more photographic results)
+        - --personalize (for personalized style)
+        - --stylize [value] (0-1000, default 100)
+        - --chaos [value] (0-100, adds variety)
+        - --weird [value] (0-3000, adds unconventional elements)
+        - --tile (for repeating patterns)
+        - --ar [ratio] (aspect ratios)
+
+        Create prompts that include:
+        1. Detailed subject description
+        2. Style and artistic direction
+        3. Lighting and mood
+        4. Technical photography terms
+        5. Appropriate v7 parameters
+
+        Make each prompt unique and creative with rich visual details.`,
+
+        artistic: `You are an artistic prompt engineer specializing in fine art styles for Midjourney v7.
+        Create artistic prompts that focus on:
+        - Classical art movements (Renaissance, Baroque, Impressionism, etc.)
+        - Contemporary art styles (Abstract, Surrealism, Pop Art, etc.)
+        - Traditional media (Oil painting, Watercolor, Charcoal, etc.)
+        - Artistic techniques and compositions
+        - Color theory and lighting principles
+
+        Parameters to use:
+        - --style raw or --style artistic
+        - --stylize 150-300 (for enhanced artistic interpretation)
+        - --chaos 20-40 (for artistic variety)
+        - --ar 3:4 or 4:5 (portrait ratios for artwork)
+
+        Focus on creating museum-quality artistic concepts with rich visual storytelling.`,
+
+        photography: `You are a photography prompt engineer for Midjourney v7.
+        Create professional photography prompts focusing on:
+        - Professional photography techniques
+        - Camera settings and lens specifications
+        - Lighting setups (studio, natural, dramatic)
+        - Composition rules and framing
+        - Post-processing styles
+
+        Technical parameters to include:
+        - --style raw (for photorealistic results)
+        - --ar 16:9, 3:2, or 4:3 (photography ratios)
+        - --stylize 50-150 (for natural look)
+        - Camera specifications (50mm, 85mm, wide-angle, etc.)
+        - Lighting details (golden hour, studio lighting, etc.)
+
+        Create prompts that would result in portfolio-quality photographs.`,
+
+        fantasy: `You are a fantasy world prompt engineer for Midjourney v7.
+        Generate fantasy prompts featuring:
+        - Mythical creatures and magical beings
+        - Epic fantasy landscapes and realms
+        - Medieval and magical architecture
+        - Mystical lighting and atmospheric effects
+        - Fantasy character design
+
+        Creative parameters:
+        - --chaos 30-60 (for fantastical variety)
+        - --weird 500-1500 (for magical elements)
+        - --stylize 200-400 (for enhanced fantasy style)
+        - --ar 16:9 or 2:3 (cinematic or portrait)
+
+        Focus on creating immersive fantasy worlds with rich lore and magical atmosphere.`,
+
+        'white background': `You are the Photography Tutorials Engineer for Midjourney v7.
+        Create professional photography tutorials focused on photos of objects isolated against smooth white backgrounds for transparent background use.
+
+        Topics to cover:
+        - Professional photography techniques.
+        - Camera settings and lens specs (50mm, 85mm, wide angle, etc.).
+        - Lighting settings (studio, natural, dramatic, golden hour, etc.).
+        - Composition and framing rules.
+        - Post-processing styles.
+
+        Required technical parameters:
+        - --style raw (for realistic results).
+        - --ar 1:1, 3:2, or 4:3 (aspect ratio).
+        - --stylize 50-150 (for natural looking shots).`,
+
         custom: ""
     };
 
@@ -76,7 +157,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // ⭐ MODIFIED: This function has new logic to handle "Custom" prompts better.
     async function handleGeneration() {
         const apiKey = localStorage.getItem('userApiKey');
         if (!apiKey) {
@@ -108,14 +188,10 @@ document.addEventListener('DOMContentLoaded', () => {
             let finalSystemPrompt = systemPromptText;
             let finalUserPrompt = keyword;
 
-            // This is the new logic
             if (selectedTemplate === 'custom') {
-                // For custom prompts, we append the generation instruction to the user's custom system prompt.
-                // The user message will be just the keyword. This makes the AI's task clearer.
                 finalSystemPrompt = `${systemPromptText}\n\nPlease generate ${count} distinct variations based on the keyword(s) provided in the user message. Format the output as a numbered list (1., 2., etc.) without any extra text.`;
                 finalUserPrompt = keyword;
             } else {
-                // For standard templates, the logic remains the same as before.
                 finalSystemPrompt = systemPromptText;
                 finalUserPrompt = `Based on the user's idea, generate ${count} distinct and creative variations for a Midjourney prompt.
                 User's Idea: "${keyword}"
