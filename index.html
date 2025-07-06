@@ -18,21 +18,29 @@
         </header>
 
         <section class="card">
-            <h2><span class="step-number">1</span> เลือกโมเดล AI</h2>
-            <div class="form-group">
-                <label for="provider-select">AI Provider:</label>
-                <select id="provider-select">
-                    <option value="openai">OpenAI</option>
-                    <option value="anthropic">Anthropic</option>
-                    <option value="google">Gemini (Google)</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="model-select">Model:</label>
-                <select id="model-select"></select>
-            </div>
-            <p class="warning">⚠️ API Key จะถูกจัดการอย่างปลอดภัยบนเซิร์ฟเวอร์ ไม่จำเป็นต้องกรอกในหน้านี้</p>
-        </section>
+    <h2><span class="step-number">1</span> ตั้งค่า API</h2>
+    <div class="form-group">
+        <label for="provider-select">AI Provider:</label>
+        <select id="provider-select">
+            <option value="openai">OpenAI</option>
+            <option value="anthropic">Anthropic</option>
+            <option value="google">Gemini (Google)</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="model-select">Model:</label>
+        <select id="model-select"></select>
+    </div>
+    
+    <div class="form-group">
+        <label for="api-key-input">API Key ของคุณ:</label>
+        <input type="password" id="api-key-input" placeholder="วาง API Key ของคุณที่นี่ (จะถูกเก็บไว้ในเบราว์เซอร์เท่านั้น)">
+    </div>
+    <div class="button-group">
+        <button id="save-key-btn">บันทึก API Key</button>
+    </div>
+    <p class="warning">⚠️ API Key ของคุณจะถูกเก็บไว้ในเบราว์เซอร์เท่านั้น และจะไม่ถูกส่งไปที่อื่นนอกจากเซิร์ฟเวอร์ของ AI Provider ที่คุณเลือก</p>
+    </section>
 
         <section class="card">
             <h2><span class="step-number">2</span> สร้าง Prompt</h2>
