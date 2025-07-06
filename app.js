@@ -23,94 +23,61 @@ document.addEventListener('DOMContentLoaded', () => {
         google: ['gemini-1.5-pro-latest', 'gemini-1.5-flash-latest']
     };
 
-    // ⭐ MODIFIED: Re-formatted the prompt text for better readability.
     const promptTemplates = {
-        default: `You are a creative prompt engineer for Midjourney v7.
-        Create unique, detailed, and creative prompts that will generate interesting images.
+        default: `You are a creative prompt engineer for Midjourney v7. Your task is to expand the user's keyword into unique, detailed, and creative prompts.
 
-        Each prompt should be creative and different from others use these new parameters:
-        - --style raw (for more photographic results)
-        - --personalize (for personalized style)
-        - --stylize [value] (0-1000, default 100)
-        - --chaos [value] (0-100, adds variety)
-        - --weird [value] (0-3000, adds unconventional elements)
-        - --tile (for repeating patterns)
-        - --ar [ratio] (aspect ratios)
+        When creating prompts, consider including these elements for rich visual detail:
+        - Detailed subject description
+        - Style and artistic direction (e.g., impressionism, cinematic, anime)
+        - Lighting and mood (e.g., golden hour, dramatic lighting)
+        - Technical photography terms (e.g., 85mm lens, f/1.8, shallow depth of field)
+        - Appropriate v7 parameters (e.g., --style raw, --ar 16:9, --stylize 200)
 
-        Create prompts that include:
-        1. Detailed subject description
-        2. Style and artistic direction
-        3. Lighting and mood
-        4. Technical photography terms
-        5. Appropriate v7 parameters
+        Make each prompt unique and visually descriptive.`,
 
-        Make each prompt unique and creative with rich visual details.`,
+        artistic: `You are an artistic prompt engineer specializing in fine art styles for Midjourney v7. Your task is to interpret the user's keyword and transform it into a prompt that evokes a specific art style.
 
-        artistic: `You are an artistic prompt engineer specializing in fine art styles for Midjourney v7.
-        Create artistic prompts that focus on:
+        Focus on:
         - Classical art movements (Renaissance, Baroque, Impressionism, etc.)
         - Contemporary art styles (Abstract, Surrealism, Pop Art, etc.)
         - Traditional media (Oil painting, Watercolor, Charcoal, etc.)
-        - Artistic techniques and compositions
-        - Color theory and lighting principles
+        - Artistic techniques, compositions, color theory, and lighting principles.
 
-        Parameters to use:
-        - --style raw or --style artistic
-        - --stylize 150-300 (for enhanced artistic interpretation)
-        - --chaos 20-40 (for artistic variety)
-        - --ar 3:4 or 4:5 (portrait ratios for artwork)
+        The goal is to create prompts for museum-quality artistic concepts with rich visual storytelling.`,
 
-        Focus on creating museum-quality artistic concepts with rich visual storytelling.`,
+        photography: `You are a professional photography prompt engineer for Midjourney v7. Your task is to convert the user's keyword into a photorealistic prompt.
 
-        photography: `You are a photography prompt engineer for Midjourney v7.
-        Create professional photography prompts focusing on:
+        Focus on specifying:
         - Professional photography techniques
-        - Camera settings and lens specifications
-        - Lighting setups (studio, natural, dramatic)
+        - Camera settings and lens specifications (e.g., 50mm, 85mm, wide-angle)
+        - Lighting setups (studio, natural, dramatic, golden hour)
         - Composition rules and framing
         - Post-processing styles
 
-        Technical parameters to include:
-        - --style raw (for photorealistic results)
-        - --ar 16:9, 3:2, or 4:3 (photography ratios)
-        - --stylize 50-150 (for natural look)
-        - Camera specifications (50mm, 85mm, wide-angle, etc.)
-        - Lighting details (golden hour, studio lighting, etc.)
+        The goal is to create prompts that would result in portfolio-quality photographs. Always use --style raw.`,
 
-        Create prompts that would result in portfolio-quality photographs.`,
+        fantasy: `You are a fantasy world prompt engineer for Midjourney v7. Your task is to forge the user's keyword into an epic fantasy-themed prompt.
 
-        fantasy: `You are a fantasy world prompt engineer for Midjourney v7.
-        Generate fantasy prompts featuring:
+        Focus on describing:
         - Mythical creatures and magical beings
         - Epic fantasy landscapes and realms
         - Medieval and magical architecture
         - Mystical lighting and atmospheric effects
         - Fantasy character design
 
-        Creative parameters:
-        - --chaos 30-60 (for fantastical variety)
-        - --weird 500-1500 (for magical elements)
-        - --stylize 200-400 (for enhanced fantasy style)
-        - --ar 16:9 or 2:3 (cinematic or portrait)
+        The goal is to create prompts for immersive fantasy worlds with rich lore and magical atmosphere.`,
 
-        Focus on creating immersive fantasy worlds with rich lore and magical atmosphere.`,
+        'white background': `You are a product photography specialist for Midjourney v7. Your task is to create a prompt based on the user's keyword that results in an object isolated on a clean, smooth white background.
 
-        'white background': `You are the Photography Tutorials Engineer for Midjourney v7.
-        Create professional photography tutorials focused on photos of objects isolated against smooth white backgrounds for transparent background use.
+        The prompt should specify:
+        - A clear description of the object.
+        - Studio lighting, softbox, even lighting.
+        - A simple, uncluttered composition.
+        - --style raw for realism.
 
-        Topics to cover:
-        - Professional photography techniques.
-        - Camera settings and lens specs (50mm, 85mm, wide angle, etc.).
-        - Lighting settings (studio, natural, dramatic, golden hour, etc.).
-        - Composition and framing rules.
-        - Post-processing styles.
+        The final image should be suitable for e-commerce or catalogs.`,
 
-        Required technical parameters:
-        - --style raw (for realistic results).
-        - --ar 1:1, 3:2, or 4:3 (aspect ratio).
-        - --stylize 50-150 (for natural looking shots).`,
-
-        custom: ""
+        custom: "You are a helpful assistant. Follow the user's instructions precisely."
     };
 
     // --- FUNCTIONS ---
@@ -142,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateSystemPrompt() {
         const selectedTemplate = promptTemplateSelect.value;
         if (selectedTemplate === 'custom') {
-            systemPromptInput.value = localStorage.getItem('customSystemPrompt') || "You are a helpful prompt engineer. Create a prompt based on the user's keyword.";
+            systemPromptInput.value = localStorage.getItem('customSystemPrompt') || promptTemplates.custom;
             systemPromptInput.readOnly = false;
             systemPromptInput.focus();
         } else {
@@ -157,6 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // ⭐ REWRITTEN: This function now has simpler and more reliable logic.
     async function handleGeneration() {
         const apiKey = localStorage.getItem('userApiKey');
         if (!apiKey) {
@@ -170,8 +138,8 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const systemPromptText = systemPromptInput.value.trim();
-        if (!systemPromptText) {
+        const systemPrompt = systemPromptInput.value.trim();
+        if (!systemPrompt) {
             alert('System Prompt ว่างเปล่า กรุณาเลือกรูปแบบหรือกำหนดเอง');
             return;
         }
@@ -183,22 +151,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const provider = providerSelect.value;
             const model = modelSelect.value;
             const count = parseInt(promptCountInput.value, 10);
-            const selectedTemplate = promptTemplateSelect.value;
 
-            let finalSystemPrompt = systemPromptText;
-            let finalUserPrompt = keyword;
+            // This is the new, simplified user prompt. It's the same for all templates.
+            const userPrompt = `Generate ${count} distinct prompt variations based on this keyword/idea: "${keyword}".
+            
+            Please format the output as a numbered list (1., 2., etc.). Do not add any extra text, conversation, or explanations before or after the list.`;
 
-            if (selectedTemplate === 'custom') {
-                finalSystemPrompt = `${systemPromptText}\n\nPlease generate ${count} distinct variations based on the keyword(s) provided in the user message. Format the output as a numbered list (1., 2., etc.) without any extra text.`;
-                finalUserPrompt = keyword;
-            } else {
-                finalSystemPrompt = systemPromptText;
-                finalUserPrompt = `Based on the user's idea, generate ${count} distinct and creative variations for a Midjourney prompt.
-                User's Idea: "${keyword}"
-                Please format the output clearly. Each prompt must start on a new line and be prefixed with "1. ", "2. ", etc. Do not add any extra text or explanations before or after the list of prompts.`;
-            }
-
-            const responseText = await callProxyApi(provider, model, apiKey, finalSystemPrompt, finalUserPrompt);
+            const responseText = await callProxyApi(provider, model, apiKey, systemPrompt, userPrompt);
             displayResults(responseText);
 
         } catch (error) {
