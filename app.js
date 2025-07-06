@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         The goal is to create prompts for immersive fantasy worlds with rich lore and magical atmosphere.`,
 
-        'white background': `You are a product photography specialist for Midjourney v7. Your task is to create a prompt based on the user's keyword that results in an object isolated on a clean, smooth white background.
+        whitebackground: `You are a product photography specialist for Midjourney v7. Your task is to create a prompt based on the user's keyword that results in an object isolated on a clean, smooth white background.
 
         The prompt should specify:
         - A clear description of the object.
