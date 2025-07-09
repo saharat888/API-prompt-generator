@@ -145,9 +145,7 @@ The prompt must specify:
             const count = parseInt(promptCountInput.value, 10);
 
             // This is the new, simplified user prompt. It's the same for all templates.
-            const userPrompt = `Generate ${count} distinct prompt variations based on this keyword/idea: "${keyword}".
-            
-            Please format the output as a numbered list (1., 2., etc.). Do not add any extra text, conversation, or explanations before or after the list.`;
+            const userPrompt = `Generate ${count} distinct prompt variations based on this keyword/idea: "${keyword}".`;
 
             const responseText = await callProxyApi(provider, model, apiKey, systemPrompt, userPrompt);
             displayResults(responseText);
