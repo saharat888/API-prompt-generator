@@ -49,7 +49,8 @@ Focus on specifying:
 - Professional photography techniques and composition
 - Camera settings and lens specifications (e.g., 50mm, wide-angle)
 - Lighting setups (studio, natural, golden hour)
-- Always use --style raw for realism.`,
+- Always use --style raw for realism.
+- Relevant v7 parameters (e.g., --style raw, --ar 16:9)`,
 
         fantasy: `You are a fantasy world prompt engineer for Midjourney v7. Your task is to forge the user's keyword into an epic fantasy-themed prompt.
 
